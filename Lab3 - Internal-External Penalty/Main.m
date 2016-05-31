@@ -31,9 +31,9 @@ if(algorithm_selector == 'i')
         x1 = -1 + 2 * rand(1);
         x2 = -1 + 2 * rand(1);
         try
-            % [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 0.01, iterations_count );
-            x1_opt = 0;
-            x2_opt = 0;
+            [ x_opt ] = HookeJeeves_NM([x1 x2], 0.5, 0.5, 1e-4, iterations_count*iterations_count );
+            x1_opt = x_opt(1);
+            x2_opt = x_opt(2);
             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
                 optimal_results = optimal_results + 1;
             end
@@ -49,29 +49,29 @@ if(algorithm_selector == 'i')
         end
     end
 elseif(algorithm_selector == 'e')
-    % External Penalty method
-    d = [1 0;0 1];
-    s(1:2, 1:iterations_count) = 0.5;
-    for j = 1 : iterations_count
-        x = [-1 + 2 * rand(1), -1 + 2 * rand(1)];
-        try
-            % [ x1_opt, x2_opt ] = Rosenbrock_M(x, d, s, 3, 0.5, iterations_count );
-            x1_opt = 0;
-            x2_opt = 0;
-            if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
-                optimal_results = optimal_results + 1;
-            end
-            x1disp(j) = x1_opt;
-            x2disp(j) = x2_opt;
-        catch exception
-            exceptions_count = exceptions_count + 1;
-            if(exceptions_count < iterations_count)
-                j = j - 1;
-            else
-                break;
-            end
-        end
-    end
+%     % External Penalty method
+%     d = [1 0;0 1];
+%     s(1:2, 1:iterations_count) = 0.5;
+%     for j = 1 : iterations_count
+%         x = [-1 + 2 * rand(1), -1 + 2 * rand(1)];
+%         try
+%             % [ x1_opt, x2_opt ] = Rosenbrock_M(x, d, s, 3, 0.5, iterations_count );
+%             x1_opt = 0;
+%             x2_opt = 0;
+%             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
+%                 optimal_results = optimal_results + 1;
+%             end
+%             x1disp(j) = x1_opt;
+%             x2disp(j) = x2_opt;
+%         catch exception
+%             exceptions_count = exceptions_count + 1;
+%             if(exceptions_count < iterations_count)
+%                 j = j - 1;
+%             else
+%                 break;
+%             end
+%         end
+%     end
 end
 disp(['Done with ' num2str(exceptions_count) ' exceptions.']);
 
@@ -88,10 +88,10 @@ disp('Ploting graph...');
 figure;
 
 % Draw function graph
-x = -1:0.1:1;
-y = -1:0.1:1;
+x = -1:0.05:1;
+y = -1:0.05:1;
 [xx, yy] = meshgrid(x, y);
-graph = surf(xx, yy, f(xx, yy));
+graph = surf(xx, yy, fn([xx yy]));
 xlabel('x');
 ylabel('y');
 zlabel('z');
@@ -100,5 +100,5 @@ shading interp;
 hold on;
 
 % Draw results graph
-scatter3(x1disp, x2disp, f(x1disp, x2disp));
+scatter3(x1disp, x2disp, fn([x1disp x2disp]));
 disp('Finished.');

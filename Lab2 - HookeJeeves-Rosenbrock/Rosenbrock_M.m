@@ -1,4 +1,4 @@
-function [ x1_opt, x2_opt ] = Rosenbrock_M(x, d_, s, alpha, contraction, Nmax )
+function [ x1_opt, x2_opt ] = Rosenbrock_M(x, direction, s, alpha, contraction, Nmax )
 %ROSENBROCK_M Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -16,8 +16,8 @@ end
 i = 1;
 n = 2;
 d = cell(n, Nmax);
-d(:) = {d_(:,1)};
-d(1:end, 1:2:end) = {d_(:,2)};
+d(:) = { direction(:,1)};
+d(1:end, 1:2:end) = {direction(:,2)};
 lambda(1:n, 1:Nmax) = 0;
 p(1:n, 1:Nmax) = 0;
 x_(1:n, 1:Nmax) = 0;
@@ -46,7 +46,7 @@ while (i < Nmax)
             D = GramSchmidt_M(D, lambda, i);
             d{j, i} = D(:, 1);
             d{j, i+1} = D(:, 2);
-                        
+            
             for jj = 1 : n
                 lambda(jj, i) = 0;
                 p(jj, i) = 0;

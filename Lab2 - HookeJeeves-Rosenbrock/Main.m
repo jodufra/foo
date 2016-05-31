@@ -4,6 +4,7 @@ disp('Lab 2 - Hooke-Jeeves Method');
 % Method selector
 % h = HookeJeeves_M, r = Rosenbrock
 algorithm_selector = 'h';
+iterations_count = 10000;
 
 if(algorithm_selector == 'h')
     disp('Using Hooke Jeeves method');
@@ -16,7 +17,6 @@ end
 % Prepare variables
 exceptions_count = 0;
 optimal_results = 0;
-iterations_count = 100;
 x1disp = zeros(1, iterations_count);
 x2disp = zeros(1, iterations_count);
 disp([num2str(iterations_count) ' iterations.']);
@@ -31,7 +31,7 @@ if(algorithm_selector == 'h')
         x1 = -1 + 2 * rand(1);
         x2 = -1 + 2 * rand(1);
         try
-            [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 0.01, iterations_count );
+            [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 1e-10, iterations_count);
             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
                 optimal_results = optimal_results + 1;
             end
@@ -84,8 +84,8 @@ disp('Ploting graph...');
 figure;
 
 % Draw function graph
-x = -1:0.1:1;
-y = -1:0.1:1;
+x = -1:0.05:1;
+y = -1:0.05:1;
 [xx, yy] = meshgrid(x, y);
 graph = surf(xx, yy, f(xx, yy));
 xlabel('x');

@@ -13,12 +13,8 @@ elseif(Nmax <= 0)
     error('Nmax <= 0');
 end
 
-
-%Initiation of the algorithm
 i = 0;
-
-%
-while s > accuracy || i < Nmax
+while s > accuracy && i < Nmax
     %Trial stage
     x1B = x1;
     x2B = x2;
@@ -26,7 +22,7 @@ while s > accuracy || i < Nmax
     
     if(f(x1, x2) < f(x1B, x2B))
         j = 0;
-        while(f(x1, x2) < f(x1B, x2B) || j < Nmax)
+        while(f(x1, x2) < f(x1B, x2B) && j < Nmax)
             x1_B = x1B;
             x2_B = x2B;
             x1B = x1;
