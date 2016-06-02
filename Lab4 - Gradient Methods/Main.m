@@ -3,12 +3,12 @@ disp('Lab 3 - Internal-External Penalty');
 
 % Method selector
 % i = Internal, e = External
-algorithm_selector = 'i';
+algorithm_selector = 'n';
 
-if(algorithm_selector == 'i')
-    disp('Using Internal Penalty method');
-elseif(algorithm_selector == 'e')
-    disp('Using External Penalty method');
+if(algorithm_selector == 'n')
+    disp('Using Newton gradient method');
+elseif(algorithm_selector == 's')
+    disp('Using Steepest descent method');
 else
     error('Invalid method selected.');
 end
@@ -25,15 +25,13 @@ disp('Starting...');
 % Init timmer
 tic();
 
-if(algorithm_selector == 'i')
+if(algorithm_selector == 'n')
     % Internal Penalty method
     for j = 1 : iterations_count
         x1 = -1 + 2 * rand(1);
         x2 = -1 + 2 * rand(1);
         try
-            % [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 0.01, iterations_count );
-            x1_opt = 0;
-            x2_opt = 0;
+            [ x1_opt, x2_opt ] = Newton_M( x1, x2, 0.5, 0.5, 0.01, iterations_count );
             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
                 optimal_results = optimal_results + 1;
             end

@@ -1,14 +1,15 @@
 clc();clear();
-disp('Lab 3 - Internal-External Penalty');
+disp('Lab 3 - Exterior and Interior penalty function method');
 
 % Method selector
-% i = Internal, e = External
+% e = , i = 
 algorithm_selector = 'i';
+iterations_count = 100;
 
-if(algorithm_selector == 'i')
-    disp('Using Internal Penalty method');
-elseif(algorithm_selector == 'e')
-    disp('Using External Penalty method');
+if(algorithm_selector == 'e')
+    disp('Using Exterior penalty method');
+elseif(algorithm_selector == 'i')
+    disp('Using Interior penalty method');
 else
     error('Invalid method selected.');
 end
@@ -16,7 +17,6 @@ end
 % Prepare variables
 exceptions_count = 0;
 optimal_results = 0;
-iterations_count = 100;
 x1disp = zeros(1, iterations_count);
 x2disp = zeros(1, iterations_count);
 disp([num2str(iterations_count) ' iterations.']);
@@ -25,13 +25,13 @@ disp('Starting...');
 % Init timmer
 tic();
 
-if(algorithm_selector == 'i')
-    % Internal Penalty method
+if(algorithm_selector == 'e')
+    % Exterior penalty method
     for j = 1 : iterations_count
-        x1 = -1 + 2 * rand(1);
-        x2 = -1 + 2 * rand(1);
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
         try
-            [ x_opt ] = HookeJeeves_NM([x1 x2], 0.5, 0.5, 1e-4, iterations_count*iterations_count );
+            [ x_opt ] = Exterior_M( [x1 x2], 2, 1e-4, iterations_count );
             x1_opt = x_opt(1);
             x2_opt = x_opt(2);
             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
@@ -48,30 +48,29 @@ if(algorithm_selector == 'i')
             end
         end
     end
-elseif(algorithm_selector == 'e')
-%     % External Penalty method
-%     d = [1 0;0 1];
-%     s(1:2, 1:iterations_count) = 0.5;
-%     for j = 1 : iterations_count
-%         x = [-1 + 2 * rand(1), -1 + 2 * rand(1)];
-%         try
-%             % [ x1_opt, x2_opt ] = Rosenbrock_M(x, d, s, 3, 0.5, iterations_count );
-%             x1_opt = 0;
-%             x2_opt = 0;
-%             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
-%                 optimal_results = optimal_results + 1;
-%             end
-%             x1disp(j) = x1_opt;
-%             x2disp(j) = x2_opt;
-%         catch exception
-%             exceptions_count = exceptions_count + 1;
-%             if(exceptions_count < iterations_count)
-%                 j = j - 1;
-%             else
-%                 break;
-%             end
-%         end
-%     end
+elseif(algorithm_selector == 'i')
+    % Interior penalty method
+    for j = 1 : iterations_count
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
+        try
+            [ x_opt ] = Interior_M( [x1 x2], 2, 1e-4, 0.5, iterations_count );
+            x1_opt = x_opt(1);
+            x2_opt = x_opt(2);
+            if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
+                optimal_results = optimal_results + 1;
+            end
+            x1disp(j) = x1_opt;
+            x2disp(j) = x2_opt;
+        catch exception
+            exceptions_count = exceptions_count + 1;
+            if(exceptions_count < iterations_count)
+                j = j - 1;
+            else
+                break;
+            end
+        end
+    end
 end
 disp(['Done with ' num2str(exceptions_count) ' exceptions.']);
 
@@ -88,8 +87,8 @@ disp('Ploting graph...');
 figure;
 
 % Draw function graph
-x = -1:0.05:1;
-y = -1:0.05:1;
+x = -5:0.1:5;
+y = -5:0.1:5;
 [xx, yy] = meshgrid(x, y);
 graph = surf(xx, yy, fn([xx yy]));
 xlabel('x');
@@ -100,5 +99,5 @@ shading interp;
 hold on;
 
 % Draw results graph
-scatter3(x1disp, x2disp, fn([x1disp x2disp]));
+scatter3(x1disp, x2disp, f_normal([x1disp x2disp]));
 disp('Finished.');

@@ -1,4 +1,4 @@
-function [ z ] = f( d )
+function [ z ] = fn( d )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     l = length(d)/2;

@@ -26,7 +26,7 @@ xB = x;
 
 while (i < Nmax)
     for j = 1 : n
-        if(f_(xB + (s(j, i)*d{j, i})') < f_(xB))
+        if(fn(xB + (s(j, i)*d{j, i})') < fn(xB))
             xB = xB + (s(j, i)*d{j, i})';
             lambda(j, i+1) = lambda(j, i) + s(j, i);
             s(j, i+1) = alpha*s(j, i);
@@ -41,9 +41,7 @@ while (i < Nmax)
     
     for j = 1 : n
         if(p(j, i) ~= 0 && lambda(j, i)~= 0)
-            D(:, 1) = d{j, i};
-            D(:, 2) = d{j, i+1};
-            D = GramSchmidt_M(D, lambda, i);
+            D = GramSchmidt_M(d(:,i:i+1), lambda, i);
             d{j, i} = D(:, 1);
             d{j, i+1} = D(:, 2);
             

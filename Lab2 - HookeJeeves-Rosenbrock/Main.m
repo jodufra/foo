@@ -2,12 +2,14 @@ clc();clear();
 disp('Lab 2 - Hooke-Jeeves Method');
 
 % Method selector
-% h = HookeJeeves_M, r = Rosenbrock
-algorithm_selector = 'h';
-iterations_count = 10000;
+% h = HookeJeeves_M, hn = HookeJeeves_NM, r = Rosenbrock
+algorithm_selector = 'hn';
+iterations_count = 100;
 
 if(algorithm_selector == 'h')
     disp('Using Hooke Jeeves method');
+elseif(algorithm_selector == 'hn')
+    disp('Using Hooke Jeeves n dimensions method');
 elseif(algorithm_selector == 'r')
     disp('Using Rosenbrock method');
 else
@@ -31,7 +33,30 @@ if(algorithm_selector == 'h')
         x1 = -1 + 2 * rand(1);
         x2 = -1 + 2 * rand(1);
         try
-            [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 1e-10, iterations_count);
+            [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, 0.5, 0.5, 1e-5, iterations_count * iterations_count);
+            if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
+                optimal_results = optimal_results + 1;
+            end
+            x1disp(j) = x1_opt;
+            x2disp(j) = x2_opt;
+        catch exception
+            exceptions_count = exceptions_count + 1;
+            if(exceptions_count < iterations_count)
+                j = j - 1;
+            else
+                break;
+            end
+        end
+    end
+elseif(algorithm_selector == 'hn')
+    % Hooke Jeeves n dimensions method
+    for j = 1 : iterations_count
+        x1 = -1 + 2 * rand(1);
+        x2 = -1 + 2 * rand(1);
+        try
+            [ x_opt ] = HookeJeeves_NM([x1 x2], 0.5, 0.5, 1e-5, iterations_count * iterations_count);
+            x1_opt = x_opt(1);
+            x2_opt = x_opt(2);
             if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
                 optimal_results = optimal_results + 1;
             end
