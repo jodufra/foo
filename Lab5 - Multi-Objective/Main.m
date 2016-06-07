@@ -65,4 +65,6 @@ shading flat ;
 % plot3(xx1, yy1, zz1);
 % plot3(xx2, yy2, zz2);
 % plot3(xx3, yy3, zz3);
+plot3(xx, yy, F_E(xx, yy, 0.5, 2));
+plot3(xx, yy, F_I(xx, yy, 0.5, 2));
 disp('Finished.');

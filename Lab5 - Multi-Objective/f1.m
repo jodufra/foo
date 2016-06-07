@@ -1,5 +1,5 @@
 function [ m ] = f1( x )
-%F1 Mass
+%F1 Mass of the beam
 %
 
 p = 7800; % 7800 kg / m^3
