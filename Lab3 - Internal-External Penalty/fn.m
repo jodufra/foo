@@ -1,4 +1,4 @@
-function [ z ] = fn( d )
+function [ z ] = fn( d, a )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -10,7 +10,7 @@ for i = 1 : m
         y = d(i, j*2);
         
         cl = c_l([x y]);
-        cnl = c_nl(x, y);
+        cnl = c_nl(x, y, a);
         if(numel(cl(cl > 0)) == 0 && cnl <= 0)
             z(i,j) = (sin(pi.*sqrt(((x./pi)).^(2)+((y./pi)).^(2))))./(pi.*sqrt(((x./pi)).^(2)+((y./pi).^2)));
         end

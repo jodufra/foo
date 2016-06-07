@@ -2,8 +2,8 @@ clc();clear();
 disp('Lab 3 - Exterior and Interior penalty function method');
 
 % Method selector
-% e = , i = 
-algorithm_selector = 'i';
+% e = , i =
+algorithm_selector = 'e';
 iterations_count = 100;
 
 if(algorithm_selector == 'e')
@@ -15,10 +15,7 @@ else
 end
 
 % Prepare variables
-exceptions_count = 0;
-optimal_results = 0;
-x1disp = zeros(1, iterations_count);
-x2disp = zeros(1, iterations_count);
+xn_disp(1:3 * iterations_count, 1:2) = 0;
 disp([num2str(iterations_count) ' iterations.']);
 disp('Starting...');
 
@@ -27,60 +24,53 @@ tic();
 
 if(algorithm_selector == 'e')
     % Exterior penalty method
+    alfa = 4;
     for j = 1 : iterations_count
         x1 = -5 + 10 * rand(1);
         x2 = -5 + 10 * rand(1);
-        try
-            [ x_opt ] = Exterior_M( [x1 x2], 2, 1e-4, iterations_count );
-            x1_opt = x_opt(1);
-            x2_opt = x_opt(2);
-            if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
-                optimal_results = optimal_results + 1;
-            end
-            x1disp(j) = x1_opt;
-            x2disp(j) = x2_opt;
-        catch exception
-            exceptions_count = exceptions_count + 1;
-            if(exceptions_count < iterations_count)
-                j = j - 1;
-            else
-                break;
-            end
-        end
+        xn_disp(j, :) = Exterior_M([x1 x2], 2, 1e-4, alfa, iterations_count );
+    end
+    alfa = 4.4934;
+    for j = 1 : iterations_count
+        jj = j+iterations_count;
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
+        xn_disp(jj, :) = Exterior_M([x1 x2], 2, 1e-4, alfa, iterations_count );
+    end
+    alfa = 5;
+    for j = 1 : iterations_count
+        jj = j+iterations_count+iterations_count;
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
+        xn_disp(jj, :) = Exterior_M([x1 x2], 2, 1e-4, alfa, iterations_count );
     end
 elseif(algorithm_selector == 'i')
     % Interior penalty method
+    alfa = 4;
     for j = 1 : iterations_count
         x1 = -5 + 10 * rand(1);
         x2 = -5 + 10 * rand(1);
-        try
-            [ x_opt ] = Interior_M( [x1 x2], 2, 1e-4, 0.5, iterations_count );
-            x1_opt = x_opt(1);
-            x2_opt = x_opt(2);
-            if(-0.3 < x1_opt && x1_opt < 0.3 && -0.3 < x2_opt && x2_opt < 0.3)
-                optimal_results = optimal_results + 1;
-            end
-            x1disp(j) = x1_opt;
-            x2disp(j) = x2_opt;
-        catch exception
-            exceptions_count = exceptions_count + 1;
-            if(exceptions_count < iterations_count)
-                j = j - 1;
-            else
-                break;
-            end
-        end
+        xn_disp(j, :) = Interior_M([x1 x2], 2, 1e-4, 0.5, alfa, iterations_count );
+    end
+    alfa = 4.4934;
+    for j = 1 : iterations_count
+        jj = j+iterations_count;
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
+        xn_disp(jj, :) = Interior_M([x1 x2], 2, 1e-4, 0.5, alfa, iterations_count );
+    end
+    alfa = 5;
+    for j = 1 : iterations_count
+        jj = j+iterations_count+iterations_count;
+        x1 = -5 + 10 * rand(1);
+        x2 = -5 + 10 * rand(1);
+        xn_disp(jj, :) = Interior_M([x1 x2], 2, 1e-4, 0.5, alfa, iterations_count );
     end
 end
-disp(['Done with ' num2str(exceptions_count) ' exceptions.']);
+disp('Done');
 
 % Stop timmer and show results
 toc();
-
-% Show results
-non_optimal_results = iterations_count - optimal_results;
-disp(['Optimal results: ' num2str(optimal_results) '(' num2str(optimal_results / iterations_count * 100) '%)']);
-disp(['Non optimal results: ' num2str(non_optimal_results) '(' num2str(non_optimal_results / iterations_count * 100) '%)']);
 
 % Prepare graphs
 disp('Ploting graph...');
@@ -90,7 +80,7 @@ figure;
 x = -5:0.1:5;
 y = -5:0.1:5;
 [xx, yy] = meshgrid(x, y);
-graph = surf(xx, yy, fn([xx yy]));
+graph = surf(xx, yy, f_normal([xx yy]));
 xlabel('x');
 ylabel('y');
 zlabel('z');
@@ -99,5 +89,16 @@ shading interp;
 hold on;
 
 % Draw results graph
-scatter3(x1disp, x2disp, f_normal([x1disp x2disp]));
+xn_disp = xn_disp.';
+xx1 = xn_disp(1, 1:iterations_count);
+yy1 = xn_disp(2, 1:iterations_count);
+xx2 = xn_disp(1, iterations_count:2 * iterations_count);
+yy2 = xn_disp(2, iterations_count:2 * iterations_count);
+xx3 = xn_disp(1, 2 * iterations_count: 3 * iterations_count);
+yy3 = xn_disp(2, 2 * iterations_count: 3 * iterations_count);
+plot3(xx1, yy1, fn([xx1 yy1], 4));
+hold on;
+plot3(xx2, yy2, fn([xx2 yy2], 4.4934));
+hold on;
+plot3(xx3, yy3, fn([xx3 yy3], 5));
 disp('Finished.');
