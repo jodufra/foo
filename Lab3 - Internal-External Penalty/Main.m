@@ -4,7 +4,7 @@ disp('Lab 3 - Exterior and Interior penalty function method');
 % Method selector
 % e = , i =
 algorithm_selector = 'e';
-iterations_count = 10;
+iterations_count = 100;
 
 if(algorithm_selector == 'e')
     disp('Using Exterior penalty method');
