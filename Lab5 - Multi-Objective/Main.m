@@ -41,14 +41,15 @@ figure;
 hold on;
 
 % Draw function graph
-x = 0.01:0.005:0.05;
-y = 0.2:0.1:1;
+x = 0.01:0.0005:0.05;
+y = 0.2:0.01:1;
 [xx, yy] = meshgrid(x, y);
 surf(xx, yy, f([xx yy], 0.5));
 xlabel('x');
 ylabel('y');
 zlabel('z');
-shading flat ;
+zlim([-200 200]);
+shading interp ;
 
 % Draw results graph
 % xn_disp = xn_disp.';
@@ -65,6 +66,8 @@ shading flat ;
 % plot3(xx1, yy1, zz1);
 % plot3(xx2, yy2, zz2);
 % plot3(xx3, yy3, zz3);
-plot3(xx, yy, F_E(xx, yy, 0.5, 2));
-plot3(xx, yy, F_I(xx, yy, 0.5, 2));
+zz = F_E(xx, yy, 0.5, 2);
+plot3(xx, yy, zz);
+zz = F_I(xx, yy, 0.5, 2);
+plot3(xx, yy, zz);
 disp('Finished.');

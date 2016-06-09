@@ -3,7 +3,7 @@ disp('Lab 3 - Exterior and Interior penalty function method');
 
 % Method selector
 % e = , i =
-algorithm_selector = 'e';
+algorithm_selector = 'i';
 iterations_count = 100;
 
 if(algorithm_selector == 'e')
@@ -75,8 +75,17 @@ hold on;
 
 % Draw function graph
 [xx, yy] = meshgrid(-5:0.1:5, -5:0.1:5);
-contour3(xx, yy, f_normal([xx yy]));
+% contour3(xx, yy, f_normal([xx yy]));
 surface(xx, yy, fn([xx yy], 5));
+if(algorithm_selector == 'e')
+    plot3(xx, yy, F_E( xx, yy, 4, 2 ), 'b');
+%     plot3(xx, yy, F_E( xx, yy, 4.4934, 2 ), 'g');
+%     plot3(xx, yy, F_E( xx, yy, 5, 2 ), 'g');
+else
+    plot3(xx, yy, F_I( xx, yy, 4, 2 ), 'b');
+%     plot3(xx, yy, F_I( xx, yy, 4.4934, 2 ), 'r');
+%     plot3(xx, yy, F_I( xx, yy, 5, 2 ), 'r');
+end
 xlabel('x');
 ylabel('y');
 zlabel('z');
@@ -100,7 +109,7 @@ else
     zz2 = F_I( xx2, yy2, 4.4934, 2 );
     zz3 = F_I( xx3, yy3, 5, 2 );
 end
-plot3(xx1, yy1, zz1);
-plot3(xx2, yy2, zz2);
-plot3(xx3, yy3, zz3);
+scatter3(xx1, yy1, zz1);
+% scatter3(xx2, yy2, zz2);
+% scatter3(xx3, yy3, zz3);
 disp('Finished.');
