@@ -1,4 +1,4 @@
-function [ X ] = c_l( x )
+function [ X ] = g( x )
 %LC Summary of this function goes here
 %   Detailed explanation goes here
 % 
@@ -14,7 +14,7 @@ function [ X ] = c_l( x )
 %     [-1]
 % 
 
-X = -x + 1;
+X = (-x + 1);
 
 end
 

@@ -1,4 +1,4 @@
-function [ x1_opt, x2_opt ] = HookeJeeves_EM( x1, x2, s, alpha, accuracy, coeficient, a, Nmax )
+function [ x1_opt, x2_opt ] = HookeJeeves_M( x1, x2, s, alpha, accuracy, coeficient, a, func, Nmax )
 %HOOKEJEEVES_M Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -18,15 +18,15 @@ while s > accuracy && i < Nmax
     %Trial stage
     x1B = x1;
     x2B = x2;
-    x = TrialStage_N(s, [x1B x2B], a);
+    x = TrialStage_N(s, [x1B x2B], func, a, coeficient);
     x1 = x(1);
     x2 = x(2);
-    z = F_E(x1, x2, a, coeficient);
-    zB = F_E(x1B, x2B, a, coeficient);
+    z = func(x1, x2, a, coeficient);
+    zB = func(x1B, x2B, a, coeficient);
     if(z < zB)
         j = 0;
-        z = F_E(x1, x2, a, coeficient);
-        zB = F_E(x1B, x2B, a, coeficient);
+        z = func(x1, x2, a, coeficient);
+        zB = func(x1B, x2B, a, coeficient);
         while(z < zB && j < Nmax)
             x1_B = x1B;
             x2_B = x2B;
@@ -36,7 +36,7 @@ while s > accuracy && i < Nmax
             %Working stage
             x1 = 2 * x1B - x1_B;
             x2 = 2 * x2B - x2_B;
-            x = TrialStage_N(s, [x1 x2], a);
+            x = TrialStage_N(s, [x1 x2], func, a, coeficient);
             x1 = x(1);
             x2 = x(2);
             j = j + 1;

@@ -5,11 +5,12 @@ function [ x_opt ] = Exterior_M( x, c, accuracy, alfa, Nmax )
 i = 1;
 x_(1:Nmax, 1:2) = 0;
 x_(1,:) = x;
+func = @F_E;
 while i < Nmax
     i = i + 1;
-    x_(i,:) = HookeJeeves_EM( x_(i-1,1), x_(i-1,2), 0.5, 0.5, 1e-4, c, alfa, Nmax * Nmax );
+    x_(i,:) = HookeJeeves_M( x_(i-1,1), x_(i-1,2), 0.5, 0.5, 1e-5, c, alfa, func, 10000 );
     c = 2 * c;
-    if(abs( x_(i,:) - x_(i-1,:)) < accuracy)
+    if(norm( x_(i,:) - x_(i-1,:)) < accuracy)
         break;
     end
 end

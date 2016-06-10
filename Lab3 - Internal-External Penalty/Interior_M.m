@@ -6,11 +6,12 @@ i = 1;
 n = 2;
 x_(1:Nmax, 1:n) = 0;
 x_(1,:) = x;
+func = @F_I;
 while i < Nmax
     i = i + 1;
-    x_(i,:) = HookeJeeves_IM( x_(i-1,1), x_(i-1,2), 0.5, 0.5, 1e-4, c, alfa, Nmax * Nmax );
+    x_(i,:) = HookeJeeves_M( x_(i-1,1), x_(i-1,2), 0.5, 0.5, 1e-4, c, alfa, func, 10000 );
     c = scalling*c;
-    if(abs( x_(i,:) - x_(i-1,:)) < accuracy)
+    if(norm( x_(i,:) - x_(i-1,:)) < accuracy)
         break;
     end
 end

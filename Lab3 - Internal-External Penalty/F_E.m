@@ -2,7 +2,11 @@ function [ F ] = F_E( x1, x2, a, c )
 %F Summary of this function goes here
 %   Detailed explanation goes here
 
-F = f_normal([x1 x2]) + c .* (max(0, c_l(x1)).^2 + max(0, c_l(x2)).^2 + max(0, c_nl(x1, x2, a)).^2);
+g1 = max(0, g(x1)).^2;
+g2 = max(0, g(x2)).^2;
+g3 = max(0, h(x1, x2, a)).^2;
+S = g1 + g2 + g3;
+F = f([x1 x2]) + c .* S;
 
 end
 

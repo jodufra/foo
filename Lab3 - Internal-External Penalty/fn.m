@@ -9,10 +9,10 @@ for i = 1 : m
         x = d(i, j);
         y = d(i, j*2);
         
-        cl = c_l([x y]);
-        cnl = c_nl(x, y, a);
+        cl = g([x y]);
+        cnl = h(x, y, a);
         if(numel(cl(cl > 0)) == 0 && cnl <= 0)
-            z(i,j) = f_normal([x y]);
+            z(i,j) = f([x y]);
         end
     end
 end

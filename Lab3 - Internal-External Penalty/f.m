@@ -1,4 +1,4 @@
-function [ z ] = f_normal( d )
+function [ z ] = f( d )
 %F_NORMAL Summary of this function goes here
 %   Detailed explanation goes here
 
